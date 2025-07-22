@@ -1,0 +1,69 @@
+{% extends "layout.html" %} {% block title %}BMI Calculator - AI Health
+Insight{% endblock %} {% block content %}
+<div class="max-w-2xl mx-auto">
+  <div class="text-center">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+      BMI Calculator
+    </h1>
+    <p class="mt-2 text-lg text-gray-600 dark:text-gray-300">
+      Enter your height and weight to calculate your Body Mass Index (BMI).
+    </p>
+  </div>
+  <div class="mt-8 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md">
+    <form id="bmi-form">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label
+            for="height-ft"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >Height (feet)</label
+          >
+          <input
+            type="number"
+            id="height-ft"
+            class="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            placeholder="e.g., 5"
+            required
+          />
+        </div>
+        <div>
+          <label
+            for="height-in"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >Height (inches)</label
+          >
+          <input
+            type="number"
+            id="height-in"
+            class="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-blue-500 focus:border-blue-500"
+            placeholder="e.g., 9"
+          />
+        </div>
+      </div>
+      <div class="mt-4">
+        <label
+          for="weight-kg"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >Weight (kg)</label
+        >
+        <input
+          type="number"
+          id="weight-kg"
+          class="mt-1 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          placeholder="e.g., 70"
+          required
+        />
+      </div>
+      <button
+        type="submit"
+        class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg"
+      >
+        Calculate BMI
+      </button>
+    </form>
+    <div id="bmi-result" class="result mt-6">
+      <!-- BMI result will be injected here -->
+    </div>
+  </div>
+</div>
+{% endblock %}

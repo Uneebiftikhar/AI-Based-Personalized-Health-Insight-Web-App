@@ -1,0 +1,38 @@
+{% extends "layout.html" %} {% block title %}Symptom Checker - AI Health
+Insight{% endblock %} {% block content %}
+<div class="max-w-2xl mx-auto">
+  <div class="text-center">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+      Symptom Checker & Precautions
+    </h1>
+    <p class="mt-2 text-lg text-gray-600 dark:text-gray-300">
+      List your symptoms to receive an analysis of possible conditions and
+      medical precautions.
+    </p>
+  </div>
+  <div class="mt-8 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md">
+    <form id="symptoms-form">
+      <label for="symptoms" class="sr-only">Symptoms</label>
+      <textarea
+        id="symptoms"
+        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-blue-500 focus:border-blue-500"
+        placeholder="e.g., fever, persistent cough, headache, fatigue"
+        required
+        rows="5"
+      ></textarea>
+      <button
+        type="submit"
+        class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg"
+      >
+        Analyze My Symptoms
+      </button>
+    </form>
+    <div
+      id="symptoms-result"
+      class="mt-6 prose max-w-none prose-blue dark:prose-invert"
+    >
+      <!-- AI response will be injected here -->
+    </div>
+  </div>
+</div>
+{% endblock %}

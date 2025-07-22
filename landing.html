@@ -1,0 +1,87 @@
+{% extends "layout.html" %} {% block title %}Welcome - AI Health Insight{%
+endblock %} {% block content %}
+<div class="text-center py-16">
+  <h1
+    class="text-4xl md:text-6xl font-extrabold text-gray-900 dark:text-white tracking-tight"
+  >
+    Your Personal AI Health Assistant
+  </h1>
+  <p
+    class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-gray-600 dark:text-gray-300"
+  >
+    Get personalized insights into meditation, diet, and symptoms, powered by
+    advanced AI.
+  </p>
+  {% if not current_user.is_authenticated %}
+  <div class="mt-8 flex justify-center gap-4">
+    <a
+      href="{{ url_for('main.login') }}"
+      class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg text-lg"
+      >Login with Google</a
+    >
+    <a
+      href="{{ url_for('main.login_guest') }}"
+      class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 font-bold py-3 px-8 rounded-lg text-lg"
+      >Continue as Guest</a
+    >
+  </div>
+  {% endif %}
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+  <a
+    href="{{ url_for('main.meditation') }}"
+    class="block bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow"
+  >
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+      Meditation Therapies
+    </h3>
+    <p class="mt-2 text-gray-600 dark:text-gray-300">
+      Discover mind and body therapies tailored to different meditation types.
+    </p>
+  </a>
+  <a
+    href="{{ url_for('main.diet') }}"
+    class="block bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow"
+  >
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+      AI Diet Planner
+    </h3>
+    <p class="mt-2 text-gray-600 dark:text-gray-300">
+      Receive a customized diet plan based on your unique health profile.
+    </p>
+  </a>
+  <a
+    href="{{ url_for('main.symptoms') }}"
+    class="block bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow"
+  >
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+      Symptom Checker
+    </h3>
+    <p class="mt-2 text-gray-600 dark:text-gray-300">
+      Enter your symptoms to understand potential conditions and precautions.
+    </p>
+  </a>
+  <a
+    href="{{ url_for('main.bmi') }}"
+    class="block bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow"
+  >
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+      BMI Calculator
+    </h3>
+    <p class="mt-2 text-gray-600 dark:text-gray-300">
+      Calculate your Body Mass Index quickly and easily.
+    </p>
+  </a>
+  <a
+    href="{{ url_for('main.report') }}"
+    class="block bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow md:col-span-1 lg:col-span-1"
+  >
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+      Report Analyzer
+    </h3>
+    <p class="mt-2 text-gray-600 dark:text-gray-300">
+      Upload a blood report for an AI-powered analysis.
+    </p>
+  </a>
+</div>
+{% endblock %}

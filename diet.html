@@ -1,0 +1,39 @@
+{% extends "layout.html" %} {% block title %}Diet Planner - AI Health Insight{%
+endblock %} {% block content %}
+<div class="max-w-2xl mx-auto">
+  <div class="text-center">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+      AI Diet Planner
+    </h1>
+    <p class="mt-2 text-lg text-gray-600 dark:text-gray-300">
+      Describe your health profile, goals, and preferences to get a custom diet
+      plan.
+    </p>
+  </div>
+  <div class="mt-8 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md">
+    <form id="diet-form">
+      <label for="health-info" class="sr-only">Health Information</label>
+      <textarea
+        id="health-info"
+        name="health_info"
+        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-blue-500 focus:border-blue-500"
+        placeholder="e.g., 30-year-old male, 180 lbs, looking to lose weight. No allergies, prefers a vegetarian diet."
+        required
+        rows="5"
+      ></textarea>
+      <button
+        type="submit"
+        class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg"
+      >
+        Generate My Diet Plan
+      </button>
+    </form>
+    <div
+      id="diet-result"
+      class="result mt-6 prose max-w-none prose-blue dark:prose-invert"
+    >
+      <!-- AI response will be injected here -->
+    </div>
+  </div>
+</div>
+{% endblock %}

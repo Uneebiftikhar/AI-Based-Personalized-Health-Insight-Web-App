@@ -1,0 +1,129 @@
+{% extends "layout.html" %} {% block title %}My History - AI Health Insight{%
+endblock %} {% block content %}
+<div class="max-w-4xl mx-auto">
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">My History</h1>
+    <p class="mt-2 text-lg text-gray-600 dark:text-gray-300">
+      A log of your past interactions with the AI health tools.
+    </p>
+    {% if history %}
+    <button id="delete-all-history-btn" class="mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg shadow-sm transition-colors">
+      Delete All History
+    </button>
+    {% endif %}
+    <div id="history-flash-message" class="mt-4"></div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="mb-8">
+    <form id="history-search-form" class="relative">
+      <label for="history-search" class="sr-only">Search History</label>
+      <input
+        type="text"
+        id="history-search"
+        name="q"
+        class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Search by tool or keyword (e.g., 'diet', 'fever')..."
+        value="{{ request.args.get('q', '') }}"
+      />
+      <div
+        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+      >
+        <svg
+          class="w-5 h-5 text-gray-400"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+      </div>
+    </form>
+  </div>
+
+  <div id="history-list" class="space-y-4">
+    {% if history %} {% for item in history %}
+    <details
+      class="history-item bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden"
+      data-id="{{ item.id }}"
+    >
+      <summary
+        class="flex justify-between items-center p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
+      >
+        <div class="flex-grow">
+          <h3
+            class="text-lg font-bold text-blue-600 dark:text-blue-400 history-tool-type"
+          >
+            {{ item.tool_type }}
+          </h3>
+          <p
+            class="mt-1 text-sm text-gray-700 dark:text-gray-300 truncate history-prompt"
+          >
+            Your Input: {{ item.prompt }}
+          </p>
+        </div>
+        <span
+          class="text-xs text-gray-500 dark:text-gray-400 ml-4 flex-shrink-0"
+          >{{ item.timestamp.strftime('%b %d, %Y') }}</span
+        >
+        <button class="delete-history-btn ml-4 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 focus:outline-none" title="Delete this entry" data-id="{{ item.id }}">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <svg
+          class="w-5 h-5 ml-2 text-gray-500 dark:text-gray-400 transform transition-transform details-arrow"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </summary>
+      <div class="p-6 border-t border-gray-200 dark:border-gray-700">
+        <h4 class="font-semibold text-gray-700 dark:text-gray-200">
+          Full AI Response:
+        </h4>
+        <div
+          class="mt-2 text-gray-600 dark:text-gray-300 prose max-w-none dark:prose-invert"
+        >
+          {{ item.response | safe }}
+        </div>
+      </div>
+    </details>
+    {% endfor %}
+    <div
+      id="no-results-message"
+      class="hidden text-center text-gray-600 dark:text-gray-400 py-8"
+    >
+      <p>No history entries match your search.</p>
+    </div>
+    {% else %}
+    <p class="text-center text-gray-600 dark:text-gray-400">
+      You have no saved history yet.
+    </p>
+    {% endif %}
+  </div>
+</div>
+<style>
+  details > summary {
+    list-style: none;
+  }
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+  details[open] .details-arrow {
+    transform: rotate(180deg);
+  }
+</style>
+{% endblock %}

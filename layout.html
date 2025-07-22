@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}AI Health Insight{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+    </style>
+    <script>
+      // Add Tailwind CSS dark mode configuration
+      tailwind.config = {
+        darkMode: "class",
+      };
+
+      // On page load, set the theme based on localStorage or system preference
+      // This is in the head to prevent a flash of unstyled content (FOUC).
+      if (
+        localStorage.getItem("color-theme") === "dark" ||
+        (!("color-theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
+  </head>
+  <body
+    class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 flex flex-col min-h-screen transition-colors duration-300"
+  >
+    <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50">
+      <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center">
+            <a
+              href="{{ url_for('main.index') }}"
+              class="flex-shrink-0 flex items-center gap-2 text-xl font-bold text-gray-800 dark:text-white"
+            >
+              <svg
+                class="h-8 w-8 text-blue-600"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>Health Insight</span>
+            </a>
+          </div>
+          <!-- Desktop Menu -->
+          <div class="hidden md:flex items-center space-x-4">
+            <a
+              href="{{ url_for('main.meditation') }}"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium"
+              >Meditation</a
+            >
+            <a
+              href="{{ url_for('main.diet') }}"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium"
+              >Diet Plan</a
+            >
+            <a
+              href="{{ url_for('main.symptoms') }}"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium"
+              >Symptom Checker</a
+            >
+            <a
+              href="{{ url_for('main.bmi') }}"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium"
+              >BMI Calculator</a
+            >
+            <a
+              href="{{ url_for('main.report') }}"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium"
+              >Report Analyzer</a
+            >
+            {% if current_user.is_authenticated and current_user.username !=
+            'Guest' %}
+            <a
+              href="{{ url_for('main.history') }}"
+              class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium"
+              >History</a
+            >
+            {% endif %}
+          </div>
+          <div class="hidden md:flex items-center space-x-2">
+            <button
+              id="theme-toggle"
+              type="button"
+              class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+            >
+              <svg
+                id="theme-toggle-dark-icon"
+                class="hidden w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+                ></path>
+              </svg>
+              <svg
+                id="theme-toggle-light-icon"
+                class="hidden w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 003.636 6.464l.707.707a1 1 0 001.414-1.414l-.707-.707zM3 11a1 1 0 100-2H2a1 1 0 100 2h1zM6.464 16.364a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707z"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+            {% if current_user.is_authenticated %}
+            <span class="text-sm text-gray-600 dark:text-gray-300"
+              >Welcome, {{ current_user.username.split()[0] }}!</span
+            >
+            <button
+              id="logout-button"
+              class="bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white font-bold py-2 px-4 rounded-lg text-sm"
+            >
+              Logout
+            </button>
+            {% else %}
+            <a
+              href="{{ url_for('main.login_guest') }}"
+              class="bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white font-bold py-2 px-4 rounded-lg text-sm"
+              >Guest</a
+            >
+            <a
+              href="{{ url_for('main.login') }}"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm"
+              >Login</a
+            >
+            {% endif %}
+          </div>
+          <!-- Mobile Menu Button -->
+          <div class="md:hidden flex items-center">
+            <button
+              id="mobile-menu-button"
+              class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+            >
+              <span class="sr-only">Open main menu</span>
+              <svg
+                class="h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16m-7 6h7"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Mobile Menu, show/hide based on menu state. -->
+      <div class="md:hidden hidden" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <a
+            href="{{ url_for('main.meditation') }}"
+            class="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium"
+            >Meditation</a
+          >
+          <a
+            href="{{ url_for('main.diet') }}"
+            class="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium"
+            >Diet Plan</a
+          >
+          <a
+            href="{{ url_for('main.symptoms') }}"
+            class="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium"
+            >Symptom Checker</a
+          >
+          <a
+            href="{{ url_for('main.bmi') }}"
+            class="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium"
+            >BMI Calculator</a
+          >
+          <a
+            href="{{ url_for('main.report') }}"
+            class="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium"
+            >Report Analyzer</a
+          >
+          {% if current_user.is_authenticated and current_user.username !=
+          'Guest' %}
+          <a
+            href="{{ url_for('main.history') }}"
+            class="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium"
+            >History</a
+          >
+          {% endif %}
+        </div>
+        <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-600">
+          <div class="px-2 space-y-2">
+            {% if current_user.is_authenticated %}
+            <div class="px-3 mb-2">
+              <p class="text-base font-medium text-gray-800 dark:text-white">
+                Welcome, {{ current_user.username.split()[0] }}!
+              </p>
+            </div>
+            <button
+              id="mobile-logout-button"
+              class="block w-full text-left bg-red-50 dark:bg-red-900 hover:bg-red-100 dark:hover:bg-red-800 text-red-800 dark:text-red-200 font-medium py-2 px-3 rounded-lg text-base"
+            >
+              Logout
+            </button>
+            {% else %}
+            <a
+              href="{{ url_for('main.login_guest') }}"
+              class="block w-full text-left bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white font-medium py-2 px-3 rounded-lg text-base"
+              >Continue as Guest</a
+            >
+            <a
+              href="{{ url_for('main.login') }}"
+              class="mt-2 block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-3 rounded-lg text-base"
+              >Login with Google</a
+            >
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 rounded-md dark:bg-blue-900 dark:border-blue-700 dark:text-blue-200"
+        role="alert"
+      >
+        <p>{{ message }}</p>
+      </div>
+      {% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock %}
+    </main>
+
+    <footer
+      class="bg-white dark:bg-gray-800 mt-8 border-t border-gray-200 dark:border-gray-700"
+    >
+      <div
+        class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-gray-500 dark:text-gray-400 text-sm"
+      >
+        &copy; 2025 AI Powered Health Insight App. All rights reserved.
+      </div>
+    </footer>
+
+    <!-- Logout Confirmation Modal -->
+    <div
+      id="logout-modal"
+      class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50"
+    >
+      <div
+        class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800"
+      >
+        <div class="mt-3 text-center">
+          <h3
+            class="text-lg leading-6 font-medium text-gray-900 dark:text-white"
+          >
+            Confirm Logout
+          </h3>
+          <div class="mt-2 px-7 py-3">
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              Are you sure you want to log out?
+            </p>
+          </div>
+          <div class="items-center px-4 py-3">
+            <button
+              id="confirm-logout-btn"
+              class="px-4 py-2 bg-red-500 text-white text-base font-medium rounded-md w-auto shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              Yes, Logout
+            </button>
+            <button
+              id="cancel-logout-btn"
+              class="ml-3 px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white text-base font-medium rounded-md w-auto shadow-sm hover:bg-gray-300 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

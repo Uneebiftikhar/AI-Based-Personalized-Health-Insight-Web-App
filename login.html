@@ -1,0 +1,37 @@
+{% extends "layout.html" %} {% block content %}
+<div
+  class="max-w-md mx-auto mt-10 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md"
+>
+  <h1 class="text-2xl font-bold text-center text-gray-900 dark:text-white">
+    Login
+  </h1>
+  <p class="text-center text-gray-600 dark:text-gray-300 mt-2">
+    Please log in to continue.
+  </p>
+
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %} {% for category, message in messages %}
+  <div
+    class="mt-4 bg-{{ 'red' if category == 'error' else 'blue' }}-100 dark:bg-{{ 'red' if category == 'error' else 'blue' }}-900 border-l-4 border-{{ 'red' if category == 'error' else 'blue' }}-500 text-{{ 'red' if category == 'error' else 'blue' }}-700 dark:text-{{ 'red' if category == 'error' else 'blue' }}-200 p-4 rounded-md"
+    role="alert"
+  >
+    <p>{{ message }}</p>
+  </div>
+  {% endfor %} {% endif %} {% endwith %}
+
+  <div class="mt-6 space-y-4">
+    <a
+      href="{{ url_for('main.login') }}"
+      class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg"
+    >
+      Login with Google
+    </a>
+    <a
+      href="{{ url_for('main.login_guest') }}"
+      class="block w-full text-center bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 font-bold py-3 px-4 rounded-lg"
+    >
+      Continue as Guest
+    </a>
+  </div>
+</div>
+{% endblock %}
